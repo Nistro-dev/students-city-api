@@ -64,3 +64,28 @@ php -S localhost:8000 -t public
 	•	ROLE_ADMIN : peut valider, modifier ou supprimer tout contenu.
 
 ⸻
+
+---
+
+## 📬 Exemples de requêtes API
+
+###  📝 Inscription (POST /api/register)
+```bash
+curl -X POST http://localhost:8000/api/register \
+     -H "Content-Type: application/json" \
+     -d '{"username": "user", "email": "user@example.com", "password": "motdepasse"}'
+```
+
+### 🔐 Connexion (POST /api/login)
+```bash
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "motdepasse"}'
+```
+
+### 👤 Infos utilisateur connecté (GET /api/me)
+
+```bash
+curl -X GET http://localhost:8000/api/me \
+  -H "Authorization: Bearer <TOKEN>"
+```
