@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un établissement
+{% endblock %}
+
+{% block body %}
+	<div class="bg-gray-100 py-10">
+		<div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+			<h1 class="text-3xl font-semibold text-gray-800 mb-6">Ajouter un établissement</h1>
+
+			{{ form_start(form, { attr: { class: 'space-y-5' } }) }}
+
+			<div>
+				{{ form_label(form.name, null, { label_attr: { class: 'block text-gray-700 font-medium mb-1' } }) }}
+				{{ form_widget(form.name, { attr: { class: 'block w-full px-4 py-2 border border-gray-300 rounded' } }) }}
+				{{ form_errors(form.name) }}
+			</div>
+
+			<div>
+				{{ form_label(form.type, null, { label_attr: { class: 'block text-gray-700 font-medium mb-1' } }) }}
+				{{ form_widget(form.type, { attr: { class: 'block w-full px-4 py-2 border border-gray-300 rounded' } }) }}
+				{{ form_errors(form.type) }}
+			</div>
+
+			<div>
+				{{ form_label(form.address, null, { label_attr: { class: 'block text-gray-700 font-medium mb-1' } }) }}
+				{{ form_widget(form.address, { attr: { class: 'block w-full px-4 py-2 border border-gray-300 rounded' } }) }}
+				{{ form_errors(form.address) }}
+			</div>
+
+			<div>
+				{{ form_label(form.description, null, { label_attr: { class: 'block text-gray-700 font-medium mb-1' } }) }}
+				{{ form_widget(form.description, { attr: { class: 'block w-full px-4 py-2 border border-gray-300 rounded', rows: 4 } }) }}
+				{{ form_errors(form.description) }}
+			</div>
+
+			<div class="pt-4">
+				<button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded transition">
+					Soumettre
+				</button>
+			</div>
+
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}

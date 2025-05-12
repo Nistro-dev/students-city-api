@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="flex">
+  <aside class="w-64 bg-white shadow-md">
+    <div class="p-6 font-bold text-xl border-b">Admin Panel</div>
+    <nav class="p-4 space-y-2 text-gray-700">
+      <a href="{{ path('admin_user_list') }}" class="block hover:bg-gray-100 p-2 rounded {{ app.request.attributes.get('_route') starts with 'admin_user' ? 'bg-gray-200 font-semibold' : '' }}">
+        Utilisateurs
+      </a>
+      <a href="{{ path('admin_place_list') }}" class="block hover:bg-gray-100 p-2 rounded {{ app.request.attributes.get('_route') starts with 'admin_place' ? 'bg-gray-200 font-semibold' : '' }}">
+        Établissements
+      </a>
+      <a href="{{ path('admin_review_list') }}" class="block hover:bg-gray-100 p-2 rounded {{ app.request.attributes.get('_route') starts with 'admin_review' ? 'bg-gray-200 font-semibold' : '' }}">
+        Avis
+      </a>
+      <a href="{{ path('logout') }}" class="block hover:bg-gray-100 p-2 rounded text-red-600">Déconnexion</a>
+    </nav>
+  </aside>
+
+  <main class="flex-grow p-6 bg-gray-50">
+
+    {% block admin_body %}{% endblock %}
+  </main>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+<script type="text/javascript">
+  let map;
+  let allMarkers = [];
+  let initialBounds;
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 46.603354, lng: 1.888334 },
+      zoom: 6,
+    });
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        new google.maps.Marker({
+          position: userLocation,
+          map: map,
+          title: "Vous êtes ici",
+          icon: { url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }
+        });
+      });
+    }
+
+    {% if places is defined and places|length > 0 %}
+      const bounds = new google.maps.LatLngBounds();
+
+      {% for place in places %}
+        {% if place.latitude and place.longitude %}
+          const marker{{ loop.index }} = new google.maps.Marker({
+            position: { lat: {{ place.latitude }}, lng: {{ place.longitude }} },
+            map: map,
+            title: "{{ place.name|e('js') }}"
+          });
+
+          const infowindow{{ loop.index }} = new google.maps.InfoWindow({
+            content: `
+              <div style="max-width:200px">
+                <strong>{{ place.name|e }}</strong><br>
+                📍 {{ place.address|e }}<br>
+                ⭐ {{ place.averageRating|number_format(1, '.', '') }}/5<br>
+                <a href="{{ path('front_place_show', { id: place.id }) }}" class="text-blue-600">Voir les détails</a>
+              </div>
+            `
+          });
+
+          marker{{ loop.index }}.addListener("click", () => {
+            infowindow{{ loop.index }}.open(map, marker{{ loop.index }});
+            map.panTo(marker{{ loop.index }}.getPosition());
+            map.setZoom(14);
+          });
+
+          bounds.extend(marker{{ loop.index }}.getPosition());
+          allMarkers.push({ marker: marker{{ loop.index }}, name: "{{ place.name|e('js') }}" });
+        {% endif %}
+      {% endfor %}
+
+      map.fitBounds(bounds);
+      initialBounds = bounds;
+    {% endif %}
+  }
+
+  function resetZoom() {
+    if (initialBounds) {
+      map.fitBounds(initialBounds);
+    }
+  }
+
+  function filterList() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const listItems = document.querySelectorAll('.place-list-item');
+    listItems.forEach(item => {
+      const name = item.dataset.name.toLowerCase();
+      item.style.display = name.includes(query) ? 'block' : 'none';
+    });
+  }
+
+  function focusMarker(index) {
+    const selected = allMarkers[index];
+    if (selected) {
+      map.panTo(selected.marker.getPosition());
+      map.setZoom(14);
+      google.maps.event.trigger(selected.marker, 'click');
+    }
+  }
+</script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZCQD6hAxDjbtYMi6EFjJvqcSycoVUT_w&callback=initMap"
+  async defer>
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="bg-gray-100 py-10">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+      <h1 class="text-3xl font-semibold text-gray-800 mb-4">Carte des établissements</h1>
+      <div id="map" class="w-full rounded shadow border" style="height: 600px;"></div>
+      <div class="mt-2">
+        <button onclick="resetZoom()" class="bg-blue-500 text-white px-4 py-2 rounded mt-3 hover:bg-blue-600">
+          Réinitialiser la vue
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="text-xl font-semibold text-gray-700 mb-2">Liste des établissements</h2>
+      <input type="text" id="searchInput" oninput="filterList()" placeholder="Rechercher..." class="w-full px-4 py-2 mb-4 border rounded">
+      <ul class="space-y-2">
+        {% for place in places %}
+          {% if place.latitude and place.longitude %}
+            <li class="place-list-item p-3 bg-white rounded shadow cursor-pointer hover:bg-gray-50 transition"
+                onclick="focusMarker({{ loop.index0 }})"
+                data-name="{{ place.name }}">
+              <strong>{{ place.name }}</strong><br>
+              ⭐ {{ place.averageRating|number_format(1, '.', '') }}/5<br>
+              📍 {{ place.address }}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

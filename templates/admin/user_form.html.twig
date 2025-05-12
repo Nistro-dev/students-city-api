@@ -1,0 +1,55 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Admin — {{ title }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block admin_body %}
+<div class="bg-gray-100 py-10">
+  <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6">{{ title }}</h1>
+
+    {{ form_start(form, {attr: {'class': 'space-y-6'}}) }}
+      <div>
+        {{ form_label(form.username, 'Pseudo', {'label_attr': {'class': 'block text-gray-700 mb-2'}}) }}
+        {{ form_widget(form.username, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400'}}) }}
+        {{ form_errors(form.username) }}
+      </div>
+
+      <div>
+        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'block text-gray-700 mb-2'}}) }}
+        {{ form_widget(form.email, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400'}}) }}
+        {{ form_errors(form.email) }}
+      </div>
+
+      <div>
+        {{ form_label(form.plainPassword, 'Mot de passe', {'label_attr': {'class': 'block text-gray-700 mb-2'}}) }}
+        {{ form_widget(form.plainPassword, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400'}}) }}
+        {{ form_help(form.plainPassword) }}
+        {{ form_errors(form.plainPassword) }}
+      </div>
+
+      <div>
+        {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'block text-gray-700 mb-2'}}) }}
+        {{ form_widget(form.status, {'attr': {'class': 'w-full border border-gray-300 rounded px-3 py-2'}}) }}
+        {{ form_errors(form.status) }}
+      </div>
+
+      <div>
+        {{ form_label(form.roles, 'Rôles', {'label_attr': {'class': 'block text-gray-700 mb-2'}}) }}
+        <div class="flex space-x-4">
+          {{ form_widget(form.roles) }}
+        </div>
+        {{ form_errors(form.roles) }}
+      </div>
+    {{ form_end(form) }}
+
+    <div class="mt-4 text-center">
+      <a href="{{ path('admin_user_list') }}" class="text-gray-600 hover:underline">← Retour à la liste</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

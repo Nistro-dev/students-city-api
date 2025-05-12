@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Inscription</h1>
+
+    {% for msg in app.flashes('login_success') %}
+      <div class="mb-4 bg-green-100 text-green-800 px-4 py-2 rounded">
+        {{ msg }}
+      </div>
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+      {{ form_row(form.username, {
+         'label': 'Pseudo',
+         'attr': {'class':'block w-full px-4 py-2 border rounded'}
+      }) }}
+      {{ form_row(form.email, {
+         'label': 'Email',
+         'attr': {'class':'block w-full px-4 py-2 border rounded'}
+      }) }}
+      {{ form_row(form.plainPassword, {
+         'label': 'Mot de passe',
+         'attr': {'class':'block w-full px-4 py-2 border rounded'}
+      }) }}
+      <button
+        type="submit"
+        class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
+      >S’inscrire</button>
+    {{ form_end(form) }}
+
+    <p class="mt-4 text-center text-sm">
+      Déjà un compte ? <a href="{{ path('login') }}" class="text-blue-600 hover:underline">Connectez-vous</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

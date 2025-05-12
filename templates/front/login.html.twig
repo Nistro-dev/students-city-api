@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Connexion</h1>
+
+    {% if error %}
+      <div class="mb-4 px-4 py-2 bg-red-100 text-red-800 rounded">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+      </div>
+    {% endif %}
+
+    {% for msg in app.flashes('login_success') %}
+      <div class="mb-4 bg-green-100 text-green-800 px-4 py-2 rounded">
+        {{ msg }}
+      </div>
+    {% endfor %}
+
+    <form action="{{ path('login') }}" method="post" class="space-y-4">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+      <div>
+        <label for="email" class="block text-gray-700">Email :</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="{{ last_username }}"
+          required autofocus
+          class="block w-full px-4 py-2 mt-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-gray-700">Mot de passe :</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          class="block w-full px-4 py-2 mt-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+      >
+        Se connecter
+      </button>
+    </form>
+    <p class="mt-4 text-center text-sm">
+      Pas encore de compte ? <a href="{{ path('front_register') }}" class="text-blue-600 hover:underline">Inscrivez-vous</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Students City
+			{% endblock %}
+		</title>
+		{% block stylesheets %}
+			<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+		{% endblock %}
+		{% block javascripts %}{% endblock %}
+	</head>
+	<body class="bg-gray-100 flex flex-col min-h-screen">
+
+		<nav class="bg-white shadow">
+			<div class="container mx-auto px-4">
+				<div class="flex justify-between items-center h-16">
+					<a href="{{ path('profile') }}" class="text-xl font-bold text-gray-800">Students City</a>
+
+					<form method="get" action="{{ path('front_place_list') }}" class="flex items-center space-x-2">
+						<input type="text" name="q" placeholder="Rechercher un lieu..." value="{{ app.request.query.get('q') }}" class="px-3 py-1 border rounded text-sm"/>
+						<select name="type" class="px-2 py-1 border rounded text-sm">
+							<option value="">Tous types</option>
+							<option value="restaurant" {{ app.request.query.get('type') == 'restaurant' ? 'selected' : '' }}>Restaurant</option>
+							<option value="bar" {{ app.request.query.get('type') == 'bar' ? 'selected' : '' }}>Bar</option>
+							<option value="gym" {{ app.request.query.get('type') == 'gym' ? 'selected' : '' }}>Salle de sport</option>
+							<option value="other" {{ app.request.query.get('type') == 'other' ? 'selected' : '' }}>Autre</option>
+						</select>
+						<button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded text-sm">Rechercher</button>
+					</form>
+
+					<div class="flex space-x-4">
+						{% if app.user %}
+							<a href="{{ path('profile') }}" class="text-gray-700 hover:text-gray-900">Mon Profil</a>
+							<a href="{{ path('front_place_list') }}" class="text-gray-700 hover:text-gray-900">Établissements</a>
+							<a href="{{ path('front_map') }}" class="text-gray-700 hover:text-gray-900">Carte</a>
+							{% if is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('admin_user_list') }}" class="text-gray-700 hover:text-gray-900">Panel Admin</a>
+							{% endif %}
+							<a href="{{ path('logout') }}" class="text-gray-700 hover:text-gray-900">Déconnexion</a>
+						{% else %}
+							<a href="{{ path('login') }}" class="text-gray-700 hover:text-gray-900">Connexion</a>
+							<a href="{{ path('front_register') }}" class="text-gray-700 hover:text-gray-900">Inscription</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<main class="flex-grow container mx-auto py-6"> {% block body %}{% endblock %}
+			</main>
+
+			<footer class="bg-white shadow py-4">
+				<div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+					&copy;
+					{{ "now"|date('Y') }}
+					Students City
+				</div>
+			</footer>
+		</body>
+	</html>
+
